@@ -37,13 +37,28 @@ unique(df$SEXO)
 df <- df %>% filter(FECHA >= as.Date("2020-01-01") & FECHA <= as.Date("2020-12-31"),
                     SEXO %in% c("FEMENINO", "MASCULINO")) 
 
+# Carguemos el mapa 
+departamental <- read_sf("C:\\Users\\leona\\Desktop\\CURSO R\\CLASE.08\\CLASE.08\\mapaDpto\\DEPARTAMENTOS_inei_geogpsperu_suyopomalia.shp")
+
+
+## GENERACIÓN DE GRÁFICOS ##
+
+# Número de valores faltantes por columna
+colSums(is.na(df))
+
+# Gráfico 1:
+graf1 <- df %>% 
+  # Transformemos la columna EDAD
+  mutate(EDAD = as.numeric(EDAD)) %>% ggplot(aes(x=EDAD, fill=SEXO))+ 
+  geom_histogram(stat = "count")+scale_fill_manual(values = c("#EF0C58","#2284B2"))+
+  labs(y="Cantidad de Fallecidos", x="Edad de Fallecidos", title = "Histograma de la edad de los fallecidos",
+       caption="Fuente: Portal de Datos Abiertos")+
+  # Separando por SEXO
+  facet_grid(SEXO~.) 
+
+graf1 <- grid.arrange(graf1, bottom= textGrob("SINADEF", x=0.9, hjust = 1,
+                                              gp = gpar(fontface="italic", fontsize=14)))  
 
 
 
 
-
-
-
-
-
-  
